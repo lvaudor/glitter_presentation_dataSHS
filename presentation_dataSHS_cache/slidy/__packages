@@ -1,0 +1,10 @@
+base
+WikidataR
+dplyr
+stringr
+purrr
+XML
+RCurl
+SPARQL
+glitter
+leaflet
