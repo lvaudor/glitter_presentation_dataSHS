@@ -72,19 +72,24 @@ Promouvoir l'usage (exploration, recueil, analyse) des LOD pour les chercheurs e
 - facilitant l'**envoi** des requêtes
 - facilitant le **nettoyage** des résultats pour une analyse/valorisation ultérieure dans R
 
+# Projet: quelques rappels sur les LOD/ web des données
+
+![&copy; Camille Scheffler](img/web_des_donnees_cscheffler.png){width=1500px}
+
+# Projet: quelques rappels sur les LOD/ web des données
+
+![&copy; Camille Scheffler](img/LOD_principes_cscheffler.png){width=1500px}
+
 # Projet: Difficultés d'appropriation des LOD
 
-<table><tr><td style="width:300">
-![](img/image_RECIT.png){height=500px}
-</td>
-<td style="width:300">
+
 - 👀 ce qu'on appréhende directement: le **web documentaire**
 - 💭 difficultés liées à la structure des données en **graphes**
     + visualisation souvent **incomplète** du graphe (modèle de données) 
     + métadonnées intégrées aux données => il faut collecter les données pour comprendre ce qu'il y a dedans
-    + Transformation en données **tabulaires** pour analyse ![](img/donnees_en_graphe.png){height=550px}
-
-</td></tr></table>
+    + Transformation en données **tabulaires** pour analyse 
+    
+![](img/donnees_en_graphe.png){height=550px}
 
 # Projet: Difficultés de collecte
 
@@ -107,11 +112,17 @@ Or, le langage SPARQL est **spécifique** à
 
 # Projet: avancement
 
+<table><td style="width:30%">
 Un **petit** projet ... (projet émergent ENS, 20 000 euros sur 3 ans). 🐈
 
-Un package **en cours de développement** => amélioration à prévoir début 2022.
 
-![](img/github_logo.png) Package installable et modifiable [ici](https://github.com/lvaudor/glitter).
+![](img/chantier.png){width=100px} Un package **en cours de développement** => amélioration à prévoir début 2022.
+
+</td><td>
+![](img/github_logo.png){width="50px"} Package installable et modifiable [ici](https://github.com/lvaudor/glitter).
+
+![](img/capture_github.png)
+</td></table>
 
 # Wikidata: exploration côté "documentaire"
 
@@ -175,6 +186,9 @@ tib=spq_init() %>%
   spq_head(n=10) %>% 
   send()
 ```
+<!-- Sans limite, cette requête retournerait 267307 résultats (fonctionne avec glitter, requête directe sur WDQS entraînte Timeout) -->
+
+
 
 - ✍️  ⚙️ Rédaction et envoi de commandes R
 - 🎁 Recueil du tableau de résultats en tant qu'objet R
@@ -397,7 +411,11 @@ Fonctions notamment inspirées de dplyr
 
 # Package glitter: spq_filter()
 
-![](img/dplyr_filter.png) **FILTRER** les résultats renvoyés
+<table><td style="width:30%">
+![](img/dplyr_filter.png)
+</td><td>
+**FILTRER** les résultats renvoyés
+</td></table>
 
 Articles avec "wikidata" dans le titre (en anglais):
 
@@ -414,7 +432,11 @@ spq_init() %>%
 
 # Package glitter: spq_mutate()
 
-![](img/dplyr_mutate.png) **MODIFIER** les résultats renvoyés.
+<table><td style="width:30%">
+![](img/dplyr_mutate.png)
+</td><td>
+**MODIFIER** les résultats renvoyés.
+</td></table>
 
 Données sur films, date de sortie ET année de sortie
 
@@ -430,7 +452,11 @@ spq_init() %>%
 
 # Package glitter: spq_select()
 
-![](img/dplyr_arrange.png) **SELECTIONNER** les variables renvoyées
+<table><td style="width:30%">
+![](img/dplyr_arrange.png)
+</td><td>
+**SELECTIONNER** les variables renvoyées
+</td></table>
 
 Données sur films, localisation narrative, date de sortie ET année de sortie
 
@@ -447,13 +473,17 @@ spq_init() %>%
 
 # Package glitter: spq_arrange()
 
-![](img/dplyr_arrange.png) **ORDONNER** les résultats renvoyés.
+<table><td style="width:30%">
+![](img/dplyr_arrange.png)
+</td><td>
+**ORDONNER** les résultats renvoyés.
+</td></table>
 
 Personnes nées ou habitant à New York qui font l'objet du plus grand nombre d'articles Wikimedia.
 
 ```{r spq_arrange}
 spq_init() %>%
-  spq_add("?pers wdt:P31 wd:Q5",label="?item") %>%        # ?pers est une instance de personne
+  spq_add("?pers wdt:P31 wd:Q5",label="?pers") %>%        # ?pers est une instance de personne
   spq_add("?pers wdt:P19/wdt:P131* wd:Q60") %>%           # qui est née ou est située à New-York
   spq_add("?pers wikibase:sitelinks ?sitelinks") %>%      # ?personne fait l'objet de n liens dans le projet Wikimedia
   spq_arrange(c("desc(?sitelinks)")) %>%                  # <= classe par ordre décroissant de n
@@ -464,7 +494,11 @@ spq_init() %>%
 
 # Package glitter: spq_group_by, spq_summarise()
 
-![](img/dplyr_summarise.png) **GROUPER** et **RESUMER** les résultats renvoyés.
+<table><td style="width:30%">
+![](img/dplyr_summarise.png)
+</td><td>
+**GROUPER** et **RESUMER** les résultats renvoyés.
+</td></table>
 
 Communes d'Auvergne-Rhône-Alpes qui ont été supprimées lors de la réforme territoriale (nombre par département).
 
@@ -478,115 +512,152 @@ tib=spq_init() %>%
   spq_summarise(c("?ncomsup"="count(?com)")) %>%
   send()
 ```
+# Package glitter: perfectible pour les requêtes complexes
 
-# Autres endpoints: dbpedia
+![](img/chantier.png){width=100px} Certains éléments de syntaxe restent à simplifier...
+
+<table><td>
+**Pour l'instant**, beaucoup de longs "strings" inspirés de SPARQL
+```{r,eval=FALSE}
+spq_filter("contains(lcase(?itemTitle),'wikidata')")
+
+spq_filter("lang(?itemTitle)='en'")
+
+spq_mutate(c("?year"="year(?date)"))
+
+spq_select("-?date")    
+
+spq_arrange(c("desc(?sitelinks)"))
+
+spq_group_by(c("?dep", "?depLabel"))
+
+spq_summarise(c("?ncomsup"="count(?com)"))
+```
+
+</td><td>
+**Dans l'idéal**, une syntaxe qui se rapprocherait le plus possible de:
+```{r,eval=FALSE}
+filter(stringr::str_detect(tolower(itemTitle),"wikidata"))
+
+filter(lang(itemTitle)=="en")
+
+mutate(year=lubridate::year(date))
+
+select(-date)    
+
+arrange(desc(sitelinks))
+
+group_by(dep,depLabel)
+
+summarise(ncomsup=count(com))
+```
+
+</td></table>
+
+# Généralisation : dbpedia
 
 ```{r}
-tib=spq_init() %>% 
-  spq_prefix(prefixes=c(dbo="http://dbpedia.org/ontology/")) %>% 
+tib=spq_init()%>% 
   spq_add("?person rdfs:label 'David Bowie'@en")  %>% 
   spq_add("?person dbo:birthPlace ?place") %>% 
-  send("https://dbpedia.org/sparql")
+  send("dbpedia")
 ```
 
 ```{r}
+knitr::kable(tib)
+```
+
+
+```{r}
 tib=spq_init() %>% 
-  spq_prefix(prefixes=c(dbo="http://dbpedia.org/ontology/")) %>%
   spq_add("?person dbo:birthPlace ?place") %>% 
   spq_add("?person dbo:profession ?job") %>% 
   spq_add("?job rdfs:label ?jobLabel") %>% 
   spq_filter(c("LANG(?jobLabel)='en'")) %>% 
   spq_add("?place rdfs:label 'Lyon'@en") %>% 
   spq_head(10) %>% 
-  send("https://dbpedia.org/sparql")
+  send("dbpedia")
 ```
 
-# Autres endpoints: hal
+```{r}
+knitr::kable(tib)
+```
 
-# Autres endpoints: SymoGih
+# Généralisation: hal
 
-# Autres endpoints: pas (forcément) besoin de préfixer!
+```{r}
+query_doc=spq_init() %>% 
+  spq_add("haldoc:inria-00362381 dcterms:hasVersion ?version") %>% # Ce doc a des versions ?version
+  spq_add("?version dcterms:title ?title") %>%                     # ?version a pour titre ?titre
+  spq_add(". dcterms:creator ?creator") %>%                        # ...... et pour créateur ?creator
+  spq_add(". ore:aggregates ?pdf") %>%                             # ...... et ce lien vers un ?pdf
+  spq_add("?creator hal:person ?person") %>%                       # ?creator est une personne ?person
+  spq_add("?person foaf:name ?name")                               # ?person a pour nom ?name
 
-Montrer requête SPARQL "normale" => avec préfixes
+tib_doc=send(query_doc,"hal")
 
-Montrer usual_prefixes
-
-Montrer usual endpoints (aide de send())
-
-```{r, eval=FALSE, echo=FALSE} 
-# ajouter aux issues glitter: pkoi Invalid Tag Name
-tib=spq_init() %>% 
-  spq_prefix(prefixes=c(dbo="http://dbpedia.org/ontology/")) %>% 
-  spq_add("?person rdfs:label 'David Bowie'@en")  %>% 
-  spq_add("?person ?p ?o") %>%
-  spq_head(100) %>% 
-  send("https://dbpedia.org/sparql")
+tib_doc
 ```
 
 
-# Package glitter: préfixes et endpoints
+# Généralisation: éléments de simplification
+
+```{r}
+query_doc=spq_init() %>% 
+  spq_add("haldoc:inria-00362381 dcterms:hasVersion ?version") %>% # Ce doc a des versions ?version
+  spq_add("?version dcterms:title ?title") %>%                     # ?version a pour titre ?titre
+  spq_add(". dcterms:creator ?creator") %>%                        # ...... et pour créateur ?creator
+  spq_add(". ore:aggregates ?pdf") %>%                             # ...... et ce lien vers un ?pdf
+  spq_add("?creator hal:person ?person") %>%                       # ?creator est une personne ?person
+  spq_add("?person foaf:name ?name")     
+```
+
+```{r}
+query_doc %>% build_sparql() %>% cat()
+
+tib_doc=send(query_doc,"hal")
+tib_doc=send(query_doc,"http://sparql.archives-ouvertes.fr/sparql")
+```
+
+
+
+# Généralisation: préfixes "usuels"
 
 ```{r}
 usual_prefixes
 ```
 
 
-# Ex. 2: arbre généalogique de Louis XVI
+# Généralisation: endpoints "usuels"
 
-```{r, eval=FALSE}
-people=spq_init() %>%
-  spq_add("?louis16 is wd:Q7732") %>%
-  spq_add("?louis16 (wdt:P22*/wdt:P25*) ?who", label="?who") %>%
-  spq_select("-?louis16") %>%
-  spq_language("fr") %>%
-  send()%>%
-  mutate(num=1:n())
-```
-
-```{r, eval=FALSE}
-list_people=people %>%
-  clean_wikidata_table() %>%
-  pull(who)
-
-links=spq_init() %>%
-  spq_add("?person %in% {list_people}") %>%
-  spq_add("?person wdt:P22 ?p_father") %>%
-  spq_add("?person wdt:P25 ?p_mother", label="?p_mother") %>% 
-  spq_language("fr") %>%
-  send() 
-
-list_people=bind_rows(people,
-                      links %>%
-                        select(who=p_mother,whoLabel=p_motherLabel))
-
-
-links=links %>%
-  select(person,p_father,p_mother) %>% 
-  tidyr::pivot_longer(cols=starts_with("p_"), 
-                      names_to="which_parent",
-                      values_to="parent")
-
-
-
-
-linknew=links %>% 
-  left_join(people %>%
-              select(who,num_person=num),
-            by=c("person"="who")) %>% 
-  left_join(people %>% 
-              select(who,num_parent=num),
-            by=c("parent"="who"))
+```{r}
+usual_endpoints
 ```
 
 
-```{r, eval=FALSE}
-library(tidygraph)
-library(ggraph)
-tib_g=tidygraph::tbl_graph(nodes=people,
-                           edges=linksnew) 
-tib_g %>% ggraph(layout="sugiyama")
+# Généralisation: tous les endpoints
 
+Données SIPROJURIS: Le parcours biographique de Gaston,Louis, Henry May (1849 - 1940)
+
+```{r symogih_query}
+tib=spq_init() %>% 
+  spq_prefix(prefixes=c(sym="http://symogih.org/ontology/",
+                        syr="http://symogih.org/resource/")) %>% 
+  spq_add("?tyro rdfs:label ?TyRoLabel") %>% 
+  spq_add("?tyin rdfs:label ?TyInLabel") %>% 
+  spq_add("?s ?p syr:Actr56241") %>% 
+  spq_add(". sym:isComponentOf ?info") %>% 
+  spq_add(". sym:hasRoleType ?tyro") %>% 
+  spq_add("?info sym:knowledgeUnitStandardLabel ?infoStandardLabel") %>% 
+  spq_add(". sym:knowledgeUnitStandardDate ?infoStandardDate") %>% 
+  spq_add(". sym:hasKnowledgeUnitType ?tyin") %>% 
+  spq_arrange("?infoStandardDate") %>% 
+  spq_head(n=10) %>% 
+  send(endpoint="http://bhp-publi.ish-lyon.cnrs.fr:8888/sparql")
+
+knitr::kable(tib)
 ```
+
 
 
 
@@ -598,4 +669,62 @@ Recrutement de Camille Scheffler (stage M2) et exploration des Wikidata pour deu
 - Le [lobbyisme aux USA](http://geoconfluences.ens-lyon.fr/informations-scientifiques/a-la-une/carte-a-la-une/lieux-de-pouvoir-lobbying-etats-unis)
 
 ![](img/carte_lobbies.png){width=800px}
+<!-- # Requête supp -->
+
+
+<!-- ```{r, eval=FALSE} -->
+<!-- people=spq_init() %>% -->
+<!--   spq_add("?louis16 is wd:Q7732") %>% -->
+<!--   spq_add("?louis16 (wdt:P22*/wdt:P25*) ?who", label="?who") %>% -->
+<!--   spq_select("-?louis16") %>% -->
+<!--   spq_language("fr") %>% -->
+<!--   send()%>% -->
+<!--   mutate(num=1:n()) -->
+<!-- ``` -->
+
+<!-- ```{r, eval=FALSE} -->
+<!-- list_people=people %>% -->
+<!--   clean_wikidata_table() %>% -->
+<!--   pull(who) -->
+
+<!-- links=spq_init() %>% -->
+<!--   spq_add("?person %in% {list_people}") %>% -->
+<!--   spq_add("?person wdt:P22 ?p_father") %>% -->
+<!--   spq_add("?person wdt:P25 ?p_mother", label="?p_mother") %>%  -->
+<!--   spq_language("fr") %>% -->
+<!--   send()  -->
+
+<!-- list_people=bind_rows(people, -->
+<!--                       links %>% -->
+<!--                         select(who=p_mother,whoLabel=p_motherLabel)) -->
+
+
+<!-- links=links %>% -->
+<!--   select(person,p_father,p_mother) %>%  -->
+<!--   tidyr::pivot_longer(cols=starts_with("p_"),  -->
+<!--                       names_to="which_parent", -->
+<!--                       values_to="parent") -->
+
+
+
+
+<!-- linknew=links %>%  -->
+<!--   left_join(people %>% -->
+<!--               select(who,num_person=num), -->
+<!--             by=c("person"="who")) %>%  -->
+<!--   left_join(people %>%  -->
+<!--               select(who,num_parent=num), -->
+<!--             by=c("parent"="who")) -->
+<!-- ``` -->
+
+
+<!-- ```{r, eval=FALSE} -->
+<!-- library(tidygraph) -->
+<!-- library(ggraph) -->
+<!-- tib_g=tidygraph::tbl_graph(nodes=people, -->
+<!--                            edges=linksnew)  -->
+<!-- tib_g %>% ggraph(layout="sugiyama") -->
+
+<!-- ``` -->
+
 
