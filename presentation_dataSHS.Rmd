@@ -492,7 +492,7 @@ spq_init() %>%
 # Package glitter: spq_select()
 
 <table><td style="width:30%">
-![](img/dplyr_arrange.png)
+![](img/dplyr_select.png)
 </td><td>
 **SELECTIONNER** les variables renvoyées
 </td></table>
